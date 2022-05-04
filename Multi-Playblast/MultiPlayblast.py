@@ -212,7 +212,7 @@ def SaveChange():
     v = cmds.optionMenu("saveM",q=1,sl=1)
     cmds.textField("fileName", e=1, en=1-(v-1))
     cmds.checkBox("OverrideFile",e=1, en=1-(v-1))
-    
+
 
 #CHANGE HUD VIEW
 def HUDchange():
@@ -224,17 +224,16 @@ def HUDchange():
 
 #CUSTOM LOCATION SAVE
 def RunSave(dir,v,f):
-    
+
     #set progressbar
     cmds.progressBar("pBar",e=1,progress=0)
-    cmds.progressBar("pBar",e=1,step=10)
-    
+
     #check the saving mode
     if v==0:
         #render with project directory
         MultiRender(dir)
     else:
-        
+
         #render with custom location
         if f==0:
             #open directory file dialog with .avi as options
@@ -242,16 +241,17 @@ def RunSave(dir,v,f):
         else:
             #open directory file dialog with .avi as options
             DIRECTORY = cmds.fileDialog2(fileMode=0, fileFilter="Image Files (*.png)", setProjectBtnEnabled=1, dialogStyle=0)
-        
+
         #use directory location as input for playblast
+        cmds.progressBar("pBar",e=1,step=10)
         MultiRender(DIRECTORY[0])
 
 #CREATE PLAYBLAST - with as input the location and file name
 def MultiRender(DIR):
-    
+
     #set progressbar
     cmds.progressBar("pBar",e=1,step=10)
-    
+
     #set all of the base-values based on ui input
     START_POINT = cmds.intFieldGrp("timeFloats", q=1, v1=1)
     END_POINT = cmds.intFieldGrp("timeFloats", q=1, v2=1)
@@ -282,7 +282,7 @@ def MultiRender(DIR):
     imageplaneList = []
     ViewportDefaults = [[],[],[],[]]
     i = 0
-    
+
     #get starting ao, motionblur, axisview and frameview settings
     FrameDefault = mel.eval("optionVar -q currentFrameVisibility;")
     AxisDefault = mel.eval("optionVar -q viewAxisVisibility;")
@@ -291,10 +291,10 @@ def MultiRender(DIR):
     MBDefault = cmds.getAttr("hardwareRenderingGlobals.motionBlurEnable")
     LineAADefault = cmds.getAttr("hardwareRenderingGlobals.lineAAEnable")
     AADefault = cmds.getAttr("hardwareRenderingGlobals.multiSampleEnable")
-    
+
     #set progressbar
     cmds.progressBar("pBar",e=1,step=10)
-    
+
     #loop through the modelling viewports
     for P in panelLocations:
 
@@ -340,7 +340,7 @@ def MultiRender(DIR):
             mel.eval("setViewAxisVisibility 0;")
         else:
             mel.eval("setViewAxisVisibility 1;")
-        
+
         if CAMNAME == 0:
             mel.eval("setCameraNamesVisibility 0;")
         else:
@@ -373,7 +373,7 @@ def MultiRender(DIR):
             cmds.modelEditor(panelList[P-1], e=1, dtx=ViewportDefaults[i][0], ca=ViewportDefaults[i][1], cv=ViewportDefaults[i][2], df=ViewportDefaults[i][3], dim=ViewportDefaults[i][4], dc=ViewportDefaults[i][5], dy=ViewportDefaults[i][6], fl=ViewportDefaults[i][7], fo=ViewportDefaults[i][8], gr=ViewportDefaults[i][9], hs=ViewportDefaults[i][10], ha=ViewportDefaults[i][11], hu=ViewportDefaults[i][12], ikh=ViewportDefaults[i][13], imp=ViewportDefaults[i][14], j=ViewportDefaults[i][15], lt=ViewportDefaults[i][16], lc=ViewportDefaults[i][17], m=ViewportDefaults[i][18], mt=ViewportDefaults[i][19], ncl=ViewportDefaults[i][20], npa=ViewportDefaults[i][21], nr=ViewportDefaults[i][22], nc=ViewportDefaults[i][23], ns=ViewportDefaults[i][24], pv=ViewportDefaults[i][25], pl=ViewportDefaults[i][26], ps=ViewportDefaults[i][27], pm=ViewportDefaults[i][28], str=ViewportDefaults[i][29], sds=ViewportDefaults[i][30], tx=ViewportDefaults[i][31])
 
         i = i + 1
-        
+
         #set progressbar
         cmds.progressBar("pBar",e=1,step=10)
 
@@ -425,35 +425,35 @@ def MultiRender(DIR):
     #clear selection to not get boundry lines around last edited image plane
     cmds.select(clear=1)
     cmds.modelEditor(panelList[0], e=1, imp=1)
-    
+
     #update progress bar
     cmds.progressBar("pBar",e=1,step=10)
-    
+
     #make final playblast using the preset file name and location
     if FORMAT==1:
         cmds.playblast(startTime=START_POINT, endTime=END_POINT,quality=QUALITY, compression="H.264", filename=DIR,width=RESOLUTION_X,height=RESOLUTION_Y, clearCache=1,editorPanelName=panelList[0],forceOverwrite=OVERRIDE,format="qt",viewer=1)
     elif FORMAT==2:
         cmds.playblast(startTime=START_POINT, endTime=END_POINT, filename=DIR,width=RESOLUTION_X,height=RESOLUTION_Y, clearCache=1,editorPanelName=panelList[0],forceOverwrite=OVERRIDE,format="image",viewer=1)
-    
+
     #update progress bar
     cmds.progressBar("pBar",e=1,step=10)
-    
+
     #reset values
     if FrameDefault == 0:
         mel.eval("setCurrentFrameVisibility 0;")
     elif FrameDefault == 1:
         mel.eval("setCurrentFrameVisibility 1;")
-        
+
     if AxisDefault == 0:
         mel.eval("setViewAxisVisibility 0;")
     elif AxisDefault == 1:
         mel.eval("setViewAxisVisibility 1;")
-    
+
     if CamDefault == 0:
         mel.eval("setCameraNamesVisibility 0;")
     else:
         mel.eval("setCameraNamesVisibility 1;")
-        
+
     cmds.setAttr("hardwareRenderingGlobals.lineAAEnable", LineAADefault)
     cmds.setAttr("hardwareRenderingGlobals.multiSampleEnable", AADefault)
     cmds.setAttr("hardwareRenderingGlobals.ssaoEnable", AODefault)
@@ -469,6 +469,8 @@ def MultiRender(DIR):
     #remove temporary playblasts
     for P in playblastList:
         cmds.sysFile(P,delete=1)
-    
-    #update progress bar    
+
+    #update progress bar
     cmds.progressBar("pBar",e=1,step=10)
+
+UI()

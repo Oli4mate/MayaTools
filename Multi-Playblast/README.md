@@ -11,15 +11,9 @@ The tool is made to function for Maya 2022 or newer versions (because it uses Py
 1. Ensure that you are using Maya 2022.
 2. Ensure that you have Quicktime available for Maya, you will know you have it available when in the normal Playblast menu, 'qt' is an option under 'Format'. If you do not have Quicktime for Maya, this tutorial explains how to get it: https://youtu.be/1RbUCo54MN8.
 3. Download 'MultiPlayblast.py' from the Github repository.
-4. Copy the 'MultiPlayblast.py' into your Maya scripts directory: MyDocuments\Maya\scripts\.
-5. Open the script editor in Maya and put in the following text:
-```
-import MultiPlayblast
-
-MultiPlayblast.UI()
-```
-6. Make this script into a button on a shelf by going to File > Save Script to Shelf.
-7. Press the new made shelf button to use the tool.
+4. Open the script editor in Maya and open the 'MultiPlayblast.py' script (this is not the most elegant method, and it is planned to improve in the future).
+5. Make this script into a button on a shelf by going to File > Save Script to Shelf.
+6. Press the new made shelf button to use the tool.
 
 ## Using the Tool
 1. Open the tool and create the camera layout you desire.
